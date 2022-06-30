@@ -39,9 +39,13 @@ var btn2 = document.querySelector('#btn2');
 var btn3 = document.querySelector('#btn3');
 var btn4 = document.querySelector('#btn4');
 
+//currentquestion
 var questionCounter = 0;
+//number of correct answers
 var correctCount = 0;
 
+
+var previousAnswer = document.getElementById('previousAnswerWas');
 var timerEl = document.getElementById('timer');
 var questionEl = document.getElementById('ourQuestion');
 
@@ -83,6 +87,7 @@ var timeInterval;
 function startGame() {
     timeLeft = 75;
     console.log(timeLeft);
+    localStorage.setItem('correctCount', 0);
     startTimer();
     displayQuestion();
 }
@@ -91,39 +96,89 @@ function startTimer() {
     timeInterval = setInterval(function(){
         timeLeft--;
         timerEl.textContent = timeLeft;
-        if (timeLeft < 1) {
+        if (timeLeft < 1 || questionCounter > 4) {
+            endGame();
             clearInterval(timeInterval);
         }
     }, 1000)
 }
 
+localStorage.setItem('correctCount', correctCount);
+
 function displayQuestion() {
+    if (questionCounter < 5) {
     questionEl.textContent = question[questionCounter].question;
     btn1.textContent = question[questionCounter].answers[0];
     btn2.textContent = question[questionCounter].answers[1];
     btn3.textContent = question[questionCounter].answers[2];
     btn4.textContent = question[questionCounter].answers[3];
+    } else {
+
+    }
 }
 
-document.addEventListener('click', function(event) {
-    var target = event.target;
-
-    if(target.textContent === question[0].correctAnswer) {
-        console.log("we were correct");
+btn1.addEventListener('click', function(event) {
+    if (btn1.textContent === question[questionCounter].correctAnswer) {
         questionCounter++;
-        console.log(questionCounter);
+        correctCount++;
+        logCorrect();
+        previousAnswer.textContent = 'you were correct';
         displayQuestion();
+    } else {
+        questionCounter++;
+        displayQuestion();
+        previousAnswer.textContent = 'you were wrong';
     }
-
-    console.log(target);
+});
+btn2.addEventListener('click', function(event) {
+    if (btn2.textContent === question[questionCounter].correctAnswer) {
+        questionCounter++;
+        correctCount++;
+        logCorrect();
+        displayQuestion();
+        previousAnswer.textContent = 'you were correct';
+    } else {
+        questionCounter++;
+        correctCount++;
+        displayQuestion();
+        previousAnswer.textContent = 'you were wrong';
+    }
+});
+btn3.addEventListener('click', function(event) {
+    if (btn3.textContent === question[questionCounter].correctAnswer) {
+        questionCounter++;
+        correctCount++;
+        logCorrect();
+        displayQuestion();
+        previousAnswer.textContent = 'you were correct';
+    } else {
+        questionCounter++;
+        displayQuestion();
+        previousAnswer.textContent = 'you were wrong';
+    }
+});
+btn4.addEventListener('click', function(event) {
+    if (btn4.textContent === question[questionCounter].correctAnswer) {
+        questionCounter++;
+        correctCount++;
+        logCorrect();
+        displayQuestion();
+        previousAnswer.textContent = 'you were correct';
+    } else {
+        questionCounter++;
+        displayQuestion();
+        previousAnswer.textContent = 'you were wrong';
+    }
 });
 
-function displayCorrect() {
-    
+function logCorrect() {
+    var giveCorrect = localStorage.getItem('correctCount');
+    giveCorrect++;
+    localStorage.setItem('correctCount', giveCorrect);
 }
 
-function displayIncorrect() {
-
+function endGame () {
+    window.location.href = 'highscores.html'
 }
 
 startGame();
