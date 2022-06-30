@@ -30,7 +30,7 @@ var question = [
 // currentQuestion
 var currentQuestion = 0;
 // timeLeft
-var timeLeft = 75;
+var timeLeft;
 // score
 var score = 0;
 // var btn1 = querySelector("#btn-1")
@@ -39,6 +39,13 @@ var btn2 = document.querySelector('#btn2');
 var btn3 = document.querySelector('#btn3');
 var btn4 = document.querySelector('#btn4');
 
+var questionCounter = 0;
+var correctCount = 0;
+
+var timerEl = document.getElementById('timer');
+var questionEl = document.getElementById('ourQuestion');
+
+var timeInterval;
 
 
 // startGame
@@ -72,3 +79,51 @@ var btn4 = document.querySelector('#btn4');
         //5. save updated js variable to ls
     //make high scores visible
     //prompt to play agian
+
+function startGame() {
+    timeLeft = 75;
+    console.log(timeLeft);
+    startTimer();
+    displayQuestion();
+}
+
+function startTimer() {
+    timeInterval = setInterval(function(){
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft < 1) {
+            clearInterval(timeInterval);
+        }
+    }, 1000)
+}
+
+function displayQuestion() {
+    questionEl.textContent = question[questionCounter].question;
+    btn1.textContent = question[questionCounter].answers[0];
+    btn2.textContent = question[questionCounter].answers[1];
+    btn3.textContent = question[questionCounter].answers[2];
+    btn4.textContent = question[questionCounter].answers[3];
+}
+
+document.addEventListener('click', function(event) {
+    var target = event.target;
+
+    if(target.textContent === question[0].correctAnswer) {
+        console.log("we were correct");
+        questionCounter++;
+        console.log(questionCounter);
+        displayQuestion();
+    }
+
+    console.log(target);
+});
+
+function displayCorrect() {
+    
+}
+
+function displayIncorrect() {
+
+}
+
+startGame();
