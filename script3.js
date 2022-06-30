@@ -3,6 +3,10 @@ function init() {
     document.getElementById('yourScore').textContent = "you got " + correct + " questions correct";
 }
 
-//set localStorage 'correctCount' to 0
+localStorage.setItem('')
+var subBut = document.getElementById('subButton');
+subBut.addEventListener('click', function() {
+
+})
 
 init();
